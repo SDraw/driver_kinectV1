@@ -37,4 +37,4 @@ git submodule update --init --depth=1
 * Open `driver_kinectV1.sln` in Visual Studio 2013.
 
 ## Credits
-* Thanks to @Holiks-Serbuchev for testing and debugging on real device.
+* Thanks to **@Holiks-Serbuchev** for testing and debugging on real device.
