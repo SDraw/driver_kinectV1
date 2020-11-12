@@ -1,0 +1,12 @@
+{
+    "thumbnail" : "kinect.png",
+    "components": {
+        "body": {
+            "filename": "kinect_sensor_1_0.obj",
+            "component_local" : {
+                "origin": [0.0, 0.0, 0.0],
+                "rotate_xyz" : [0.0,0.0,0.0]
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+<settings>
+  <setting name="basePosition" value="0.0 0.0 0.0"/>
+  <setting name="baseRotation" value="0.0 0.0 0.0 1.0"/>
+  <setting name="trackers" value="">
+    <tracker name="HipCenter" value="true"/>
+    <tracker name="Spine" value="false"/>
+    <tracker name="ShoulderCenter" value="false"/>
+    <tracker name="Head" value="false"/>
+    <tracker name="ShoulderLeft" value="false"/>
+    <tracker name="ElbowLeft" value="false"/>
+    <tracker name="WristLeft" value="false"/>
+    <tracker name="HandLeft" value="false"/>
+    <tracker name="ShoulderRight" value="false"/>
+    <tracker name="ElbowRight" value="false"/>
+    <tracker name="WristRight" value="false"/>
+    <tracker name="HandRight" value="false"/>
+    <tracker name="HipLeft" value="false"/>
+    <tracker name="KneeLeft" value="false"/>
+    <tracker name="AnkleLeft" value="true"/>
+    <tracker name="FootLeft" value="false"/>
+    <tracker name="HipRight" value="false"/>
+    <tracker name="KneeRight" value="false"/>
+    <tracker name="AnkleRight" value="true"/>
+    <tracker name="FootRight" value="false"/>
+  </setting>
+</settings>

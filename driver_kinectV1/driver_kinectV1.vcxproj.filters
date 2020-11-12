@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="CServerDriver.cpp" />
+    <ClCompile Include="CKinectHandler.cpp" />
+    <ClCompile Include="CEmulatedDevice.cpp" />
+    <ClCompile Include="CTrackerVive.cpp" />
+    <ClCompile Include="CKinectStation.cpp" />
+    <ClCompile Include="CJointFilter.cpp" />
+    <ClCompile Include="CDriverConfig.cpp" />
+    <ClCompile Include="..\vendor\pugixml\src\pugixml.cpp">
+      <Filter>vendor\pugixml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\Utils.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="CServerDriver.h" />
+    <ClInclude Include="CKinectHandler.h" />
+    <ClInclude Include="CEmulatedDevice.h" />
+    <ClInclude Include="CTrackerVive.h" />
+    <ClInclude Include="CKinectStation.h" />
+    <ClInclude Include="CJointFilter.h" />
+    <ClInclude Include="CDriverConfig.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="vendor">
+      <UniqueIdentifier>{9f86aeb1-fd8a-4bc6-aa1e-604a8a9386f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\pugixml">
+      <UniqueIdentifier>{cb48c047-90c6-4920-a1a6-d02294301432}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared">
+      <UniqueIdentifier>{d6a580c1-d7d7-4a4b-8855-2308f112421d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

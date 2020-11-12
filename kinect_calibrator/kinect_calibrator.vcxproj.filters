@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="CKinectMonitor.h" />
+    <ClInclude Include="CKinectConfig.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\vendor\pugixml\src\pugixml.cpp">
+      <Filter>vendor\pugixml</Filter>
+    </ClCompile>
+    <ClCompile Include="CKinectMonitor.cpp" />
+    <ClCompile Include="CKinectConfig.cpp" />
+    <ClCompile Include="..\shared\Utils.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="vendor">
+      <UniqueIdentifier>{76a65447-d504-4e2f-97ee-6df607c483c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\pugixml">
+      <UniqueIdentifier>{78a2dff0-0c60-47e3-993a-45e9a389f071}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared">
+      <UniqueIdentifier>{8caf7ab8-600e-48fc-b462-f35cf82e9975}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
