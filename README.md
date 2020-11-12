@@ -1,4 +1,4 @@
-# Driver KinectV1 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# Driver KinectV1 [![Build status](https://ci.appveyor.com/api/projects/status/lgqysn55ugrox723?svg=true)](https://ci.appveyor.com/project/SDraw/driver-kinectv1) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 SteamVR driver for Kinect for XBox 360.
 
@@ -7,8 +7,8 @@ SteamVR driver for Kinect for XBox 360.
 * Linear smoothing of movement. 
 
 ## Installation
-* Install [Kinect for Windows Runtime 1.8](https://www.microsoft.com/en-us/download/details.aspx?id=40277)
-* Extract [latest release archive](../../releases/latest) to `<SteamVR_folder>/drivers`
+* Install [Kinect for Windows Runtime 1.8](https://www.microsoft.com/en-us/download/details.aspx?id=40277).
+* Extract [latest release archive](../../releases/latest) to `<SteamVR_folder>/drivers`.
 * Add line in section `steamvr` of `<Steam_folder>/config/steamvr.vrsettings` file:
   ```JSON
   "activateMultipleDrivers": true,
