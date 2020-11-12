@@ -35,3 +35,6 @@ SteamVR driver for Kinect for XBox 360.
 git submodule update --init --depth=1
 ```
 * Open `driver_kinectV1.sln` in Visual Studio 2013.
+
+## Credits
+* Thanks to @Holiks-Serbuchev for testing and debugging on real device.
