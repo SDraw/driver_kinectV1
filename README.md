@@ -15,7 +15,7 @@ SteamVR driver for Kinect for XBox 360.
   ```
 
 ## Calibration
-* Launch `kinect_calibrator` from `<SteamVR_folder>/drivers/kinectV2/bin/win##` directory.
+* Launch `kinect_calibrator` from `<SteamVR_folder>/drivers/kinectV1/bin/win##` directory.
 * Allign base position using controllers to match virtual trackers with your hip and legs:
   * Left controller's touchpad/thumbstick: rotate left, rotate right, rotate up, rotate down. Press grip to reset rotation.
   * Right controller's touchpad/thumbstick: move right, move left, move up, move down. Press grip to reset position.
