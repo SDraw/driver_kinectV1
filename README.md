@@ -4,7 +4,8 @@ SteamVR driver for Kinect for XBox 360.
 
 ## Usage benefits
 * No additional dependencies for SteamVR ([OpenVR InputEmulator](https://github.com/matzman666/OpenVR-InputEmulator) and others).
-* Linear smoothing of movement. 
+* Linear smoothing of movement.
+* Configurable amount of trackers assigned to bones.
 
 ## Installation
 * Install [Kinect for Windows Runtime 1.8](https://www.microsoft.com/en-us/download/details.aspx?id=40277).
