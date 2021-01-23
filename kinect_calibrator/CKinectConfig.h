@@ -18,6 +18,7 @@ class CKinectConfig final
 
     glm::vec3 m_basePosition;
     glm::quat m_baseRotation;
+    unsigned char m_interpolation;
     std::vector<TrackerData> m_trackersData; // Storage only
 
     CKinectConfig(const CKinectConfig &that) = delete;

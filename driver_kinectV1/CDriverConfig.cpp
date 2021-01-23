@@ -8,13 +8,20 @@ extern char g_modulePath[];
 
 const std::vector<std::string> g_settingNames
 {
-    "basePosition", "baseRotation", "trackers"
+    "basePosition", "baseRotation", "interpolation", "trackers"
 };
+
 enum SettingIndex : size_t
 {
     SI_BasePosition = 0U,
     SI_BaseRotation,
+    SI_Interpolation,
     SI_Trackers
+};
+
+const std::vector<std::string> g_interpolationTypes
+{
+    "linear", "quadratic", "cubic", "quartic", "quintic", "exponential", "sine", "circular"
 };
 
 const std::vector<std::string> g_boneNames
@@ -28,6 +35,7 @@ const std::vector<std::string> g_boneNames
 
 glm::vec3 CDriverConfig::ms_basePosition(0.f);
 glm::quat CDriverConfig::ms_baseRotation(1.f, 0.f, 0.f, 0.f);
+unsigned char CDriverConfig::ms_interpolation = CDriverConfig::FI_Linear;
 std::vector<size_t> CDriverConfig::ms_boneIndexes;
 
 void CDriverConfig::Load()
@@ -60,6 +68,12 @@ void CDriverConfig::Load()
                         {
                             std::stringstream l_stream(l_attribValue.as_string("0.0 0.0 0.0 1.0"));
                             l_stream >> ms_baseRotation.x >> ms_baseRotation.y >> ms_baseRotation.z >> ms_baseRotation.w;
+                        } break;
+
+                        case SettingIndex::SI_Interpolation:
+                        {
+                            size_t l_interpolation = ReadEnumVector(l_attribValue.as_string("linear"), g_interpolationTypes);
+                            if(l_interpolation != std::numeric_limits<size_t>::max()) ms_interpolation = static_cast<unsigned char>(l_interpolation);
                         } break;
 
                         case SettingIndex::SI_Trackers:
@@ -99,6 +113,11 @@ const glm::vec3& CDriverConfig::GetBasePosition()
 const glm::quat& CDriverConfig::GetBaseRotation()
 {
     return ms_baseRotation;
+}
+
+unsigned char CDriverConfig::GetInterpolation()
+{
+    return ms_interpolation;
 }
 
 const std::vector<size_t>& CDriverConfig::GetBoneIndexes()

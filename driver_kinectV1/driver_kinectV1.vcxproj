@@ -209,6 +209,7 @@
     <ClCompile Include="CServerDriver.cpp" />
     <ClCompile Include="CTrackerVive.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -224,6 +225,7 @@
     <ClInclude Include="CKinectStation.h" />
     <ClInclude Include="CServerDriver.h" />
     <ClInclude Include="CTrackerVive.h" />
+    <ClInclude Include="MathUtils.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -16,6 +16,7 @@
     <ClCompile Include="..\shared\Utils.cpp">
       <Filter>shared</Filter>
     </ClCompile>
+    <ClCompile Include="MathUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="CKinectStation.h" />
     <ClInclude Include="CJointFilter.h" />
     <ClInclude Include="CDriverConfig.h" />
+    <ClInclude Include="MathUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="vendor">

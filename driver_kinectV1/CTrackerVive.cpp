@@ -56,7 +56,67 @@ void CTrackerVive::SetupProperties()
     vr::VRProperties()->SetBoolProperty(m_propertyHandle, vr::Prop_Identifiable_Bool, false);
     vr::VRProperties()->SetBoolProperty(m_propertyHandle, vr::Prop_Firmware_RemindUpdate_Bool, false);
     vr::VRProperties()->SetInt32Property(m_propertyHandle, vr::Prop_ControllerRoleHint_Int32, vr::TrackedControllerRole_Invalid);
-    vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_handed");
+
+    switch(m_index)
+    {
+        NUI_SKELETON_POSITION_COUNT;
+        case NUI_SKELETON_POSITION_HIP_CENTER:
+        case NUI_SKELETON_POSITION_HIP_LEFT:
+        case NUI_SKELETON_POSITION_HIP_RIGHT:
+        case NUI_SKELETON_POSITION_SPINE:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_waist");
+            break;
+
+        case NUI_SKELETON_POSITION_SHOULDER_CENTER:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_chest");
+            break;
+
+        case NUI_SKELETON_POSITION_SHOULDER_LEFT:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_left_shoulder");
+            break;
+
+        case NUI_SKELETON_POSITION_SHOULDER_RIGHT:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_right_shoulder");
+            break;
+
+        case NUI_SKELETON_POSITION_ELBOW_LEFT:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_left_elbow");
+            break;
+
+        case NUI_SKELETON_POSITION_ELBOW_RIGHT:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_right_elbow");
+            break;
+
+        case NUI_SKELETON_POSITION_WRIST_LEFT:
+        case NUI_SKELETON_POSITION_HAND_LEFT:
+        case NUI_SKELETON_POSITION_WRIST_RIGHT:
+        case NUI_SKELETON_POSITION_HAND_RIGHT:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_handed");
+            break;
+
+        case NUI_SKELETON_POSITION_KNEE_LEFT:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_left_knee");
+            break;
+
+        case NUI_SKELETON_POSITION_KNEE_RIGHT:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_right_knee");
+            break;
+
+        case NUI_SKELETON_POSITION_ANKLE_LEFT:
+        case NUI_SKELETON_POSITION_FOOT_LEFT:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_left_foot");
+            break;
+
+        case NUI_SKELETON_POSITION_ANKLE_RIGHT:
+        case NUI_SKELETON_POSITION_FOOT_RIGHT:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_right_foot");
+            break;
+
+        default:
+            vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_ControllerType_String, "vive_tracker_none");
+            break;
+    }
+
     vr::VRProperties()->SetInt32Property(m_propertyHandle, vr::Prop_ControllerHandSelectionPriority_Int32, -1);
     vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_NamedIconPathDeviceOff_String, "{htc}/icons/tracker_status_off.png");
     vr::VRProperties()->SetStringProperty(m_propertyHandle, vr::Prop_NamedIconPathDeviceSearching_String, "{htc}/icons/tracker_status_searching.gif");

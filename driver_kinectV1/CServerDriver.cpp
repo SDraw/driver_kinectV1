@@ -7,6 +7,7 @@
 #include "CKinectHandler.h"
 
 #include "CDriverConfig.h"
+#include "MathUtils.h"
 #include "Utils.h"
 
 const std::vector<std::string> g_messageNames
@@ -143,7 +144,32 @@ void CServerDriver::RunFrame()
     {
         const ULONGLONG l_diff = (GetTickCount64() - m_frameHistory[HI_Last]->m_tick);
         float l_smooth = static_cast<float>(l_diff) / 33.333333f;
-        l_smooth = glm::clamp(l_smooth, 0.f, 1.5f); // Extra clamp if new frame from Kinect will be slightly delayed
+        l_smooth = glm::clamp(l_smooth, 0.f, 1.f);
+
+        switch(CDriverConfig::GetInterpolation())
+        {
+            case CDriverConfig::FI_Quadratic:
+                l_smooth = QuadraticEaseInOut(l_smooth);
+                break;
+            case CDriverConfig::FI_Cubic:
+                l_smooth = CubicEaseInOut(l_smooth);
+                break;
+            case CDriverConfig::FI_Quartic:
+                l_smooth = QuarticEaseInOut(l_smooth);
+                break;
+            case CDriverConfig::FI_Quintic:
+                l_smooth = QuinticEaseInOut(l_smooth);
+                break;
+            case CDriverConfig::FI_Exponential:
+                l_smooth = ExponentialEaseInOut(l_smooth);
+                break;
+            case CDriverConfig::FI_Sine:
+                l_smooth = SineEaseInOut(l_smooth);
+                break;
+            case CDriverConfig::FI_Circular:
+                l_smooth = CircularEaseInOut(l_smooth);
+                break;
+        }
 
         for(auto l_tracker : m_trackers)
         {
