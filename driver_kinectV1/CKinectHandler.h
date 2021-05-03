@@ -26,7 +26,7 @@ class CKinectHandler final
 
     void Cleanup();
 public:
-    explicit CKinectHandler(const std::vector<size_t> &f_indexes);
+    explicit CKinectHandler();
     ~CKinectHandler();
 
     bool Initialize();

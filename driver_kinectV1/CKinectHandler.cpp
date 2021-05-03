@@ -3,16 +3,11 @@
 #include "CKinectHandler.h"
 #include "CJointFilter.h"
 
-CKinectHandler::CKinectHandler(const std::vector<size_t> &f_indexes)
+CKinectHandler::CKinectHandler()
 {
     m_kinectSensor = nullptr;
 
-    for(size_t i = 0U; i < NUI_SKELETON_POSITION_COUNT; i++) m_jointFilters[i] = nullptr;
-    for(auto l_index : f_indexes)
-    {
-        if(l_index >= NUI_SKELETON_POSITION_COUNT) continue;
-        if(!m_jointFilters[l_index]) m_jointFilters[l_index] = new CJointFilter();
-    }
+    for(auto &l_filter : m_jointFilters) l_filter = new CJointFilter();
 
     m_frameData = new FrameData();
     m_frameData->m_frameTime = 0;
@@ -78,10 +73,10 @@ void CKinectHandler::Cleanup()
         m_kinectSensor = nullptr;
     }
 
-    for(size_t i = 0U; i < NUI_SKELETON_POSITION_COUNT; i++)
+    for(auto &l_filter : m_jointFilters)
     {
-        delete m_jointFilters[i];
-        m_jointFilters[i] = nullptr;
+        delete l_filter;
+        l_filter = nullptr;
     }
 
     m_paused = false;
@@ -119,28 +114,24 @@ void CKinectHandler::Update()
 
                     for(size_t j = 0U; j < NUI_SKELETON_POSITION_COUNT; j++)
                     {
-                        if(m_jointFilters[j])
+                        m_jointFilters[j]->Update(l_skeleton.SkeletonPositions[j], l_skeleton.eSkeletonPositionTrackingState[j]);
+                        const glm::vec3 &l_filtered = m_jointFilters[j]->GetFiltered();
+                        JointData &l_jointData = m_frameData->m_joints[j];
+                        l_jointData.x = l_filtered.x;
+                        l_jointData.y = l_filtered.y;
+                        l_jointData.z = l_filtered.z;
+
+                        NUI_SKELETON_BONE_ORIENTATION l_orientations[NUI_SKELETON_POSITION_COUNT];
+                        if(NuiSkeletonCalculateBoneOrientations(&l_frame.SkeletonData[i], l_orientations) >= S_OK)
                         {
-                            m_jointFilters[j]->Update(l_skeleton.SkeletonPositions[j], l_skeleton.eSkeletonPositionTrackingState[j]);
-                            const glm::vec3 &l_filtered = m_jointFilters[j]->GetFiltered();
-                            JointData &l_jointData = m_frameData->m_joints[j];
-                            l_jointData.x = l_filtered.x;
-                            l_jointData.y = l_filtered.y;
-                            l_jointData.z = l_filtered.z;
-
-                            NUI_SKELETON_BONE_ORIENTATION l_orientations[NUI_SKELETON_POSITION_COUNT];
-                            if(NuiSkeletonCalculateBoneOrientations(&l_frame.SkeletonData[i], l_orientations) >= S_OK)
-                            {
-                                const Vector4 &l_kinectRotation = l_orientations[j].absoluteRotation.rotationQuaternion;
-                                const glm::quat l_newRotation(l_kinectRotation.w, l_kinectRotation.x, l_kinectRotation.y, l_kinectRotation.z);
-                                const glm::quat l_oldRotation(l_jointData.rw, l_jointData.rx, l_jointData.ry, l_jointData.rz);
-                                const glm::quat l_smoothedRotation = glm::slerp(l_oldRotation, l_newRotation, 0.75f);
-                                l_jointData.rx = l_smoothedRotation.x;
-                                l_jointData.ry = l_smoothedRotation.y;
-                                l_jointData.rz = l_smoothedRotation.z;
-                                l_jointData.rw = l_smoothedRotation.w;
-                            }
-
+                            const Vector4 &l_kinectRotation = l_orientations[j].absoluteRotation.rotationQuaternion;
+                            const glm::quat l_newRotation(l_kinectRotation.w, l_kinectRotation.x, l_kinectRotation.y, l_kinectRotation.z);
+                            const glm::quat l_oldRotation(l_jointData.rw, l_jointData.rx, l_jointData.ry, l_jointData.rz);
+                            const glm::quat l_smoothedRotation = glm::slerp(l_oldRotation, l_newRotation, 0.75f);
+                            l_jointData.rx = l_smoothedRotation.x;
+                            l_jointData.ry = l_smoothedRotation.y;
+                            l_jointData.rz = l_smoothedRotation.z;
+                            l_jointData.rw = l_smoothedRotation.w;
                         }
                     }
 

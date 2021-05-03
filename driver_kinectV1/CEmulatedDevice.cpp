@@ -4,6 +4,9 @@
 
 CEmulatedDevice::CEmulatedDevice()
 {
+    m_connected = false;
+    m_forcedConnected = true;
+
     m_pose = { 0 };
     m_pose.poseTimeOffset = -0.011;
     m_pose.qWorldFromDriverRotation.w = 1.0;
@@ -25,8 +28,6 @@ CEmulatedDevice::CEmulatedDevice()
 
     m_propertyHandle = vr::k_ulInvalidPropertyContainer;
     m_trackedDevice = vr::k_unTrackedDeviceIndexInvalid;
-
-    m_index = std::numeric_limits<size_t>::max();
 }
 
 CEmulatedDevice::~CEmulatedDevice()
@@ -45,7 +46,8 @@ vr::EVRInitError CEmulatedDevice::Activate(uint32_t unObjectId)
 
         SetupProperties();
 
-        m_pose.deviceIsConnected = true;
+        m_connected = true;
+        m_pose.deviceIsConnected = (m_connected && m_forcedConnected);
         m_pose.poseIsValid = true;
         m_pose.result = vr::TrackingResult_Running_OK;
 
@@ -86,20 +88,21 @@ const std::string& CEmulatedDevice::GetSerial() const
     return m_serial;
 }
 
-const size_t CEmulatedDevice::GetIndex() const
-{
-    return m_index;
-}
-
-
 bool CEmulatedDevice::IsConnected() const
 {
-    return m_pose.deviceIsConnected;
+    return m_connected;
 }
 
 void CEmulatedDevice::SetConnected(bool f_state)
 {
-    m_pose.deviceIsConnected = f_state;
+    m_connected = f_state;
+    m_pose.deviceIsConnected = (m_connected && m_forcedConnected);
+}
+
+void CEmulatedDevice::SetForcedConnected(bool f_state)
+{
+    m_forcedConnected = f_state;
+    m_pose.deviceIsConnected = (m_connected && m_forcedConnected);
 }
 
 void CEmulatedDevice::SetPosition(float f_x, float f_y, float f_z)

@@ -7,3 +7,9 @@
 [submodule "vendor/pugixml"]
 	path = vendor/pugixml
 	url = https://github.com/zeux/pugixml.git
+[submodule "vendor/imgui"]
+	path = vendor/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "vendor/imgui-sfml"]
+	path = vendor/imgui-sfml
+	url = https://github.com/eliasdaler/imgui-sfml.git

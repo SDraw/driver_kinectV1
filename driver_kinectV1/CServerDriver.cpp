@@ -10,14 +10,18 @@
 #include "MathUtils.h"
 #include "Utils.h"
 
+extern char g_modulePath[];
+
 const std::vector<std::string> g_messageNames
 {
-    "calibrate", "switch"
+    "calibration", "tracking_toggle", "tracker_toggle", "interpolation"
 };
 enum MessageIndex : size_t
 {
-    MI_Calibrate = 0U,
-    MI_Switch
+    MI_Calibration = 0U,
+    MI_TrackingToggle,
+    MI_TrackerToggle,
+    MI_Interpolation
 };
 
 enum HistoryIndex : size_t
@@ -42,7 +46,12 @@ CServerDriver::CServerDriver()
     m_kinectThread = nullptr;
     m_kinectActive = false;
     m_frameHistoryCount = 0U;
-    m_hotkeyState = false;
+    m_basePosition = glm::vec3(0.f);
+    m_baseRotation = glm::quat(1.f, 0.f, 0.f, 0.f);
+    m_interpolation = CDriverConfig::FI_Linear;
+    m_trackingState = true;
+    m_dashboardLaunchTick = 0U;
+    m_dashboardLaunched = false;
 }
 
 CServerDriver::~CServerDriver()
@@ -55,40 +64,44 @@ vr::EVRInitError CServerDriver::Init(vr::IVRDriverContext *pDriverContext)
     VR_INIT_SERVER_DRIVER_CONTEXT(pDriverContext);
     CDriverConfig::Load();
 
-    m_kinectHandler = new CKinectHandler(CDriverConfig::GetBoneIndexes());
+    m_basePosition = CDriverConfig::GetBasePosition();
+    m_baseRotation = CDriverConfig::GetBaseRotation();
+    m_trackingState = CDriverConfig::GetTrackingState();
+    m_interpolation = CDriverConfig::GetInterpolation();
+
+    m_kinectHandler = new CKinectHandler();
     m_kinectActive = true;
     m_kinectThread = new std::thread(&CServerDriver::KinectProcess, this);
 
     // Add trackers
+    for(auto &l_tracker : m_trackers) l_tracker = nullptr;
     for(auto l_index : CDriverConfig::GetBoneIndexes())
     {
-        CEmulatedDevice *l_tracker = new CTrackerVive(l_index);
-        m_trackers.push_back(l_tracker);
-        vr::VRServerDriverHost()->TrackedDeviceAdded(l_tracker->GetSerial().c_str(), vr::TrackedDeviceClass_GenericTracker, l_tracker);
+        m_trackers[l_index] = new CTrackerVive(l_index);
+        m_trackers[l_index]->SetForcedConnected(m_trackingState);
+        m_trackers[l_index]->SetOffsetPosition(m_basePosition.x, m_basePosition.y, m_basePosition.z);
+        m_trackers[l_index]->SetOffsetRotation(m_baseRotation.x, m_baseRotation.y, m_baseRotation.z, m_baseRotation.w);
+        vr::VRServerDriverHost()->TrackedDeviceAdded(m_trackers[l_index]->GetSerial().c_str(), vr::TrackedDeviceClass_GenericTracker, m_trackers[l_index]);
     }
 
     // Add fake station as command relay with Kinect model
     m_kinectStation = new CKinectStation(this);
+    m_kinectStation->SetPosition(m_basePosition.x, m_basePosition.y, m_basePosition.z);
+    m_kinectStation->SetRotation(m_baseRotation.x, m_baseRotation.y, m_baseRotation.z, m_baseRotation.w);
     vr::VRServerDriverHost()->TrackedDeviceAdded(m_kinectStation->GetSerial().c_str(), vr::TrackedDeviceClass_TrackingReference, m_kinectStation);
 
-    // Coordinates offset
-    const glm::vec3 &l_position = CDriverConfig::GetBasePosition();
-    const glm::quat &l_rotation = CDriverConfig::GetBaseRotation();
-    m_kinectStation->SetPosition(l_position.x, l_position.y, l_position.z);
-    m_kinectStation->SetRotation(l_rotation.x, l_rotation.y, l_rotation.z, l_rotation.w);
-    for(auto l_tracker : m_trackers)
-    {
-        l_tracker->SetOffsetPosition(l_position.x, l_position.y, l_position.z);
-        l_tracker->SetOffsetRotation(l_rotation.x, l_rotation.y, l_rotation.z, l_rotation.w);
-    }
+    m_dashboardLaunchTick = GetTickCount64();
 
     return vr::VRInitError_None;
 }
 
 void CServerDriver::Cleanup()
 {
-    for(auto l_tracker : m_trackers) delete l_tracker;
-    m_trackers.clear();
+    for(auto &l_tracker : m_trackers)
+    {
+        delete l_tracker;
+        l_tracker = nullptr;
+    }
 
     delete m_kinectStation;
     m_kinectStation = nullptr;
@@ -117,6 +130,24 @@ const char* const* CServerDriver::GetInterfaceVersions()
 
 void CServerDriver::RunFrame()
 {
+    // Try to launch dashboard app every 5 seconds
+    if(!m_dashboardLaunched)
+    {
+        if(GetTickCount64() - m_dashboardLaunchTick > 5000U)
+        {
+            std::string l_path(g_modulePath);
+            l_path.erase(l_path.begin() + l_path.rfind('\\'), l_path.end());
+
+            std::string l_appPath(l_path);
+            l_appPath.append("\\kinect_dash.exe");
+            STARTUPINFOA l_startupInfo = { 0 };
+            PROCESS_INFORMATION l_processInfo = { 0 };
+            l_startupInfo.cb = sizeof(STARTUPINFOA);
+            m_dashboardLaunched = (CreateProcessA(l_appPath.c_str(), NULL, NULL, NULL, FALSE, 0, NULL, l_path.c_str(), &l_startupInfo, &l_processInfo) == TRUE);
+            m_dashboardLaunchTick = GetTickCount64();
+        }
+    }
+
     if(m_kinectLock.try_lock())
     {
         const FrameData *l_frameData = m_kinectHandler->GetFrameData();
@@ -146,7 +177,7 @@ void CServerDriver::RunFrame()
         float l_smooth = static_cast<float>(l_diff) / 33.333333f;
         l_smooth = glm::clamp(l_smooth, 0.f, 1.f);
 
-        switch(CDriverConfig::GetInterpolation())
+        switch(m_interpolation)
         {
             case CDriverConfig::FI_Quadratic:
                 l_smooth = QuadraticEaseInOut(l_smooth);
@@ -171,45 +202,34 @@ void CServerDriver::RunFrame()
                 break;
         }
 
-        for(auto l_tracker : m_trackers)
+        for(size_t i = 0U; i < NUI_SKELETON_POSITION_COUNT; i++)
         {
-            const size_t l_index = l_tracker->GetIndex();
-            const JointData &l_jointA = m_frameHistory[HI_Previous]->m_joints[l_index];
-            const JointData &l_jointB = m_frameHistory[HI_Last]->m_joints[l_index];
-
-            const glm::vec3 l_jointPosA(-l_jointA.x, l_jointA.y, -l_jointA.z);
-            const glm::vec3 l_jointPosB(-l_jointB.x, l_jointB.y, -l_jointB.z);
-
-            const glm::quat l_jointRotA(l_jointA.rw, -l_jointA.rx, l_jointA.ry, -l_jointA.rz);
-            const glm::quat l_jointRotB(l_jointB.rw, -l_jointB.rx, l_jointB.ry, -l_jointB.rz);
-
-            const glm::vec3 l_linearPos = glm::mix(l_jointPosA, l_jointPosB, l_smooth);
-            const glm::quat l_linearRot = glm::slerp(l_jointRotA, l_jointRotB, l_smooth);
-
-            l_tracker->SetPosition(l_linearPos.x, l_linearPos.y, l_linearPos.z);
-            l_tracker->SetRotation(l_linearRot.x, l_linearRot.y, l_linearRot.z, l_linearRot.w);
-        }
-    }
-
-    const bool l_hotkeyState = ((GetAsyncKeyState(VK_CONTROL) & 0x8000) && (GetAsyncKeyState(0x54) & 0x8000)); // Ctrl+T
-    if(m_hotkeyState != l_hotkeyState)
-    {
-        m_hotkeyState = l_hotkeyState;
-        if(m_hotkeyState)
-        {
-            // Switch tracking
-            for(auto l_tracker : m_trackers)
+            if(m_trackers[i])
             {
-                const bool l_connected = l_tracker->IsConnected();
-                l_tracker->SetConnected(!l_connected);
+                const JointData &l_jointA = m_frameHistory[HI_Previous]->m_joints[i];
+                const JointData &l_jointB = m_frameHistory[HI_Last]->m_joints[i];
+
+                const glm::vec3 l_jointPosA(-l_jointA.x, l_jointA.y, -l_jointA.z);
+                const glm::vec3 l_jointPosB(-l_jointB.x, l_jointB.y, -l_jointB.z);
+
+                const glm::quat l_jointRotA(l_jointA.rw, -l_jointA.rx, l_jointA.ry, -l_jointA.rz);
+                const glm::quat l_jointRotB(l_jointB.rw, -l_jointB.rx, l_jointB.ry, -l_jointB.rz);
+
+                const glm::vec3 l_linearPos = glm::mix(l_jointPosA, l_jointPosB, l_smooth);
+                const glm::quat l_linearRot = glm::slerp(l_jointRotA, l_jointRotB, l_smooth);
+
+                m_trackers[i]->SetPosition(l_linearPos.x, l_linearPos.y, l_linearPos.z);
+                m_trackers[i]->SetRotation(l_linearRot.x, l_linearRot.y, l_linearRot.z, l_linearRot.w);
             }
-            m_kinectHandler->SetPaused(!m_kinectHandler->IsPaused());
         }
     }
 
     // Update devices
     m_kinectStation->RunFrame();
-    for(auto l_tracker : m_trackers) l_tracker->RunFrame();
+    for(auto l_tracker : m_trackers)
+    {
+        if(l_tracker) l_tracker->RunFrame();
+    }
 }
 
 bool CServerDriver::ShouldBlockStandbyMode()
@@ -229,8 +249,7 @@ void CServerDriver::LeaveStandby()
 void CServerDriver::KinectProcess()
 {
     const std::chrono::milliseconds l_threadDelay(33U);
-    
-    // Old Kinect fails initialization if not connected
+
     bool l_initialized = m_kinectHandler->Initialize();
     while(m_kinectActive)
     {
@@ -250,39 +269,63 @@ void CServerDriver::KinectProcess()
 
 void CServerDriver::ProcessExternalMessage(const char *f_message)
 {
-    // [ Messages ]
-    // "calibrate x y z rx ry rz rw" - change base offset
-    // "switch" - switch devices and tracking
     std::stringstream l_stream(f_message);
-
     std::string l_message;
     l_stream >> l_message;
     if(!l_message.empty() && !l_stream.fail())
     {
         switch(ReadEnumVector(l_message, g_messageNames))
         {
-            case MessageIndex::MI_Calibrate:
+            case MessageIndex::MI_Calibration:
             {
-                glm::vec3 l_position(0.f);
-                glm::quat l_rotation(1.f, 0.f, 0.f, 0.f);
-                l_stream >> l_position.x >> l_position.y >> l_position.z >> l_rotation.x >> l_rotation.y >> l_rotation.z >> l_rotation.w;
-
-                m_kinectStation->SetPosition(l_position.x, l_position.y, l_position.z);
-                m_kinectStation->SetRotation(l_rotation.x, l_rotation.y, l_rotation.z, l_rotation.w);
-                for(auto l_tracker : m_trackers)
+                l_stream >> m_basePosition.x >> m_basePosition.y >> m_basePosition.z >> m_baseRotation.x >> m_baseRotation.y >> m_baseRotation.z >> m_baseRotation.w;
+                if(!l_stream.fail())
                 {
-                    l_tracker->SetOffsetPosition(l_position.x, l_position.y, l_position.z);
-                    l_tracker->SetOffsetRotation(l_rotation.x, l_rotation.y, l_rotation.z, l_rotation.w);
+                    m_kinectStation->SetPosition(m_basePosition.x, m_basePosition.y, m_basePosition.z);
+                    m_kinectStation->SetRotation(m_baseRotation.x, m_baseRotation.y, m_baseRotation.z, m_baseRotation.w);
+                    for(auto l_tracker : m_trackers)
+                    {
+                        if(l_tracker)
+                        {
+                            l_tracker->SetOffsetPosition(m_basePosition.x, m_basePosition.y, m_basePosition.z);
+                            l_tracker->SetOffsetRotation(m_baseRotation.x, m_baseRotation.y, m_baseRotation.z, m_baseRotation.w);
+                        }
+                    }
                 }
             } break;
-            case MessageIndex::MI_Switch:
+            case MessageIndex::MI_TrackingToggle:
             {
+                m_trackingState = !m_trackingState;
                 for(auto l_tracker : m_trackers)
                 {
-                    const bool l_connected = l_tracker->IsConnected();
-                    l_tracker->SetConnected(!l_connected);
+                    if(l_tracker) l_tracker->SetForcedConnected(m_trackingState);
                 }
-                m_kinectHandler->SetPaused(!m_kinectHandler->IsPaused());
+                m_kinectHandler->SetPaused(!m_trackingState);
+            } break;
+            case MessageIndex::MI_TrackerToggle:
+            {
+                size_t l_index = std::numeric_limits<size_t>::max();
+                l_stream >> l_index;
+                if(!l_stream.fail())
+                {
+                    if(l_index < NUI_SKELETON_POSITION_COUNT)
+                    {
+                        if(m_trackers[l_index]) m_trackers[l_index]->SetConnected(!m_trackers[l_index]->IsConnected());
+                        else
+                        {
+                            m_trackers[l_index] = new CTrackerVive(l_index);
+                            vr::VRServerDriverHost()->TrackedDeviceAdded(m_trackers[l_index]->GetSerial().c_str(), vr::TrackedDeviceClass_GenericTracker, m_trackers[l_index]);
+                            m_trackers[l_index]->SetForcedConnected(m_trackingState);
+                            m_trackers[l_index]->SetOffsetPosition(m_basePosition.x, m_basePosition.y, m_basePosition.z);
+                            m_trackers[l_index]->SetOffsetRotation(m_baseRotation.x, m_baseRotation.y, m_baseRotation.z, m_baseRotation.w);
+                        }
+                    }
+                }
+            } break;
+            case MessageIndex::MI_Interpolation:
+            {
+                l_stream >> m_interpolation;
+                if(!l_stream.fail()) m_interpolation = glm::clamp<unsigned char>(m_interpolation, CDriverConfig::FI_Linear, CDriverConfig::FI_Circular);
             } break;
         }
     }

@@ -2,7 +2,7 @@
   <setting name="basePosition" value="0.0 0.0 0.0"/>
   <setting name="baseRotation" value="0.0 0.0 0.0 1.0"/>
   <setting name="interpolation" value="linear"/> <!-- linear, quadratic, cubic, quartic, quintic, exponential, sine, circular -->
-  <setting name="trackers" value="">
+  <setting name="trackers" value="true">
     <tracker name="HipCenter" value="true"/>
     <tracker name="Spine" value="false"/>
     <tracker name="ShoulderCenter" value="false"/>

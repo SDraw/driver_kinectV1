@@ -4,6 +4,8 @@
 
 class CTrackerVive final : public CEmulatedDevice
 {
+    size_t m_index;
+
     CTrackerVive(const CTrackerVive &that) = delete;
     CTrackerVive& operator=(const CTrackerVive &that) = delete;
 
