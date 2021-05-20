@@ -36,6 +36,7 @@ const std::vector<std::string> g_boneNames
 glm::vec3 CDriverConfig::ms_basePosition(0.f);
 glm::quat CDriverConfig::ms_baseRotation(1.f, 0.f, 0.f, 0.f);
 unsigned char CDriverConfig::ms_interpolation = CDriverConfig::FI_Linear;
+bool CDriverConfig::ms_tracking = true;
 std::vector<size_t> CDriverConfig::ms_boneIndexes;
 
 void CDriverConfig::Load()
@@ -78,6 +79,7 @@ void CDriverConfig::Load()
 
                         case SettingIndex::SI_Trackers:
                         {
+                            ms_tracking = l_attribValue.as_bool(true);
                             for(pugi::xml_node l_trackerNode = l_node.child("tracker"); l_trackerNode; l_trackerNode = l_trackerNode.next_sibling("tracker"))
                             {
                                 const pugi::xml_attribute l_attribBone = l_trackerNode.attribute("name");
@@ -118,6 +120,11 @@ const glm::quat& CDriverConfig::GetBaseRotation()
 unsigned char CDriverConfig::GetInterpolation()
 {
     return ms_interpolation;
+}
+
+bool CDriverConfig::GetTrackingState()
+{
+    return ms_tracking;
 }
 
 const std::vector<size_t>& CDriverConfig::GetBoneIndexes()

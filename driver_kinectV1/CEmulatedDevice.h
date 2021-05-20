@@ -3,6 +3,8 @@
 class CEmulatedDevice : public vr::ITrackedDeviceServerDriver
 {
     vr::DriverPose_t m_pose;
+    bool m_connected;
+    bool m_forcedConnected;
 
     CEmulatedDevice(const CEmulatedDevice &that) = delete;
     CEmulatedDevice& operator=(const CEmulatedDevice &that) = delete;
@@ -23,6 +25,7 @@ public:
 
     bool IsConnected() const;
     void SetConnected(bool f_state);
+    void SetForcedConnected(bool f_state);
 
     void SetPosition(float f_x, float f_y, float f_z);
     void SetRotation(float f_x, float f_y, float f_z, float f_w);
@@ -36,7 +39,6 @@ protected:
     uint32_t m_trackedDevice;
 
     std::string m_serial;
-    size_t m_index;
 
     virtual void SetupProperties();
 };
