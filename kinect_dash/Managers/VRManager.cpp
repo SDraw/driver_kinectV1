@@ -15,11 +15,12 @@ VRManager::VRManager(Core *f_core)
     m_vrSystem = vr::VR_Init(&l_initError, vr::VRApplication_Overlay);
     if(l_initError != vr::VRInitError_None)
     {
-        std::string l_errorString("Unable to intialize OpenVR: ");
+        std::string l_errorString("Unable to initialize OpenVR: ");
         l_errorString.append(vr::VR_GetVRInitErrorAsEnglishDescription(l_initError));
         throw std::runtime_error(l_errorString);
     }
 
+#ifndef DASHBOARD_DESKTOP
     // Create overlays
     vr::VROverlay()->CreateDashboardOverlay("kinect_dash.dashboard", "KinectV1 Dashboard", &m_dashboardOverlay, &m_dashboardOverlayThumbnail);
     if((m_dashboardOverlay != vr::k_ulOverlayHandleInvalid) && (m_dashboardOverlayThumbnail != vr::k_ulOverlayHandleInvalid))
@@ -38,6 +39,7 @@ VRManager::VRManager(Core *f_core)
         m_dashboardTexture.eType = vr::TextureType_OpenGL;
         m_dashboardTexture.handle = nullptr;
     }
+#endif
 
     vr::VROverlay()->CreateOverlay("kinect_dash.notify", "KinectV1 Calibration", &m_notificationOverlay);
     m_notification = 0;
@@ -69,8 +71,10 @@ VRManager::~VRManager()
 {
     if(m_notificationOverlay != vr::k_ulOverlayHandleInvalid) vr::VROverlay()->DestroyOverlay(m_notificationOverlay);
     if(m_notification != 0) vr::VRNotifications()->RemoveNotification(m_notification);
+#ifndef DASHBOARD_DESKTOP
     if(m_dashboardOverlay != vr::k_ulOverlayHandleInvalid) vr::VROverlay()->DestroyOverlay(m_dashboardOverlay);
     if(m_dashboardOverlayThumbnail != vr::k_ulOverlayHandleInvalid) vr::VROverlay()->DestroyOverlay(m_dashboardOverlayThumbnail);
+#endif
     vr::VR_Shutdown();
 }
 
@@ -136,6 +140,7 @@ bool VRManager::DoPulse()
         }
     }
 
+#ifndef DASHBOARD_DESKTOP
     while(vr::VROverlay()->PollNextOverlayEvent(m_dashboardOverlay, &m_event, sizeof(vr::VREvent_t)))
     {
         switch(m_event.eventType)
@@ -150,11 +155,14 @@ bool VRManager::DoPulse()
             } break;
         }
     }
+#endif
 
     if(m_leftHand == vr::k_unTrackedDeviceIndexInvalid) m_leftHand = m_vrSystem->GetTrackedDeviceIndexForControllerRole(vr::TrackedControllerRole_LeftHand);
     if(m_rightHand == vr::k_unTrackedDeviceIndexInvalid) m_rightHand = m_vrSystem->GetTrackedDeviceIndexForControllerRole(vr::TrackedControllerRole_RightHand);
 
+#ifndef DASHBOARD_DESKTOP
     if(IsOverlayVisible()) vr::VROverlay()->SetOverlayTexture(m_dashboardOverlay, &m_dashboardTexture);
+#endif
 
     // Calibration helper update
     if(m_calibrationHelper->IsCalibrationActive())
@@ -185,6 +193,8 @@ bool VRManager::IsKinectDevicePresent() const
 {
     return (m_kinectDevice != vr::k_unTrackedDeviceIndexInvalid);
 }
+
+#ifndef DASHBOARD_DESKTOP
 bool VRManager::IsOverlayVisible() const
 {
     bool l_result = false;
@@ -199,6 +209,7 @@ void VRManager::SetOverlayTexture(unsigned int f_name)
 {
     if(m_dashboardOverlay != vr::k_ulOverlayHandleInvalid) m_dashboardTexture.handle = reinterpret_cast<void*>(static_cast<uintptr_t>(f_name));;
 }
+#endif
 
 void VRManager::SendTrackerToggle(size_t f_index)
 {

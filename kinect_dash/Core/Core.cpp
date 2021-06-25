@@ -35,16 +35,16 @@ bool Core::Intitialize()
             m_sfmlManager = new SfmlManager(this);
             m_guiManager = new GuiManager(this);
 
+#ifndef DASHBOARD_DESKTOP
             m_vrManager->SetOverlayTexture(m_guiManager->GetRenderTargetTextureName());
+#endif
 
             m_valid = true;
             m_active = true;
         }
         catch(std::exception &l_exception)
         {
-#ifdef _DEBUG
             MessageBoxA(NULL, l_exception.what(), "KinectV1 Dashboard", MB_OK | MB_ICONEXCLAMATION);
-#endif
         }
     }
     return m_valid;
@@ -53,17 +53,17 @@ void Core::Terminate()
 {
     if(m_valid)
     {
-        delete m_guiManager; 
+        delete m_guiManager;
         m_guiManager = nullptr;
 
-        delete m_sfmlManager; 
+        delete m_sfmlManager;
         m_sfmlManager = nullptr;
 
-        delete m_vrManager; 
+        delete m_vrManager;
         m_vrManager = nullptr;
 
         m_configManager->Save();
-        delete m_configManager; 
+        delete m_configManager;
         m_configManager = nullptr;
 
         m_valid = false;
@@ -77,7 +77,9 @@ bool Core::DoPulse()
         m_active = (m_active && m_vrManager->DoPulse());
         m_active = (m_active && m_sfmlManager->DoPulse());
 
+#ifndef DASHBOARD_DESKTOP
         std::this_thread::sleep_for(g_threadSleep);
+#endif
     }
     return m_active;
 }

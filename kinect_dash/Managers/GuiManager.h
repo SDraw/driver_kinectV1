@@ -16,7 +16,9 @@ class GuiManager final
     friend class VRManager;
     Core *m_core;
 
+#ifndef DASHBOARD_DESKTOP
     sf::RenderTexture *m_renderTexture;
+#endif
 
     // Render target is needed
     GuiScreen *m_screen;
@@ -49,11 +51,13 @@ protected:
     explicit GuiManager(Core *f_core);
     ~GuiManager();
 
+#ifndef DASHBOARD_DESKTOP
     unsigned int GetRenderTargetTextureName() const;
+#endif
 
-    void Render(); // GlfwManager call only
+    void Render(); // SfmlManager call only
 
-    // VRManager only
+    // VRManager/SfmlManager only
     void ReceiveMouseMove(float f_x, float f_y);
     void ReceiveMouseClick(bool f_left, bool f_press);
 };
