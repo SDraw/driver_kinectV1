@@ -116,14 +116,20 @@ void CKinectHandler::Update()
                     {
                         m_jointFilters[j]->Update(l_skeleton.SkeletonPositions[j], l_skeleton.eSkeletonPositionTrackingState[j]);
                         const glm::vec3 &l_filtered = m_jointFilters[j]->GetFiltered();
+
                         JointData &l_jointData = m_frameData->m_joints[j];
                         l_jointData.x = l_filtered.x;
                         l_jointData.y = l_filtered.y;
                         l_jointData.z = l_filtered.z;
+                    }
 
-                        NUI_SKELETON_BONE_ORIENTATION l_orientations[NUI_SKELETON_POSITION_COUNT];
-                        if(NuiSkeletonCalculateBoneOrientations(&l_frame.SkeletonData[i], l_orientations) >= S_OK)
+                    NUI_SKELETON_BONE_ORIENTATION l_orientations[NUI_SKELETON_POSITION_COUNT];
+                    if(NuiSkeletonCalculateBoneOrientations(&l_skeleton, l_orientations) >= S_OK)
+                    {
+                        for(size_t j = 0U; j < NUI_SKELETON_POSITION_COUNT; j++)
                         {
+                            JointData &l_jointData = m_frameData->m_joints[j];
+
                             const Vector4 &l_kinectRotation = l_orientations[j].absoluteRotation.rotationQuaternion;
                             const glm::quat l_newRotation(l_kinectRotation.w, l_kinectRotation.x, l_kinectRotation.y, l_kinectRotation.z);
                             const glm::quat l_oldRotation(l_jointData.rw, l_jointData.rx, l_jointData.ry, l_jointData.rz);
