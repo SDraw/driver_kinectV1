@@ -21,7 +21,7 @@ CKinectHandler::~CKinectHandler()
     Cleanup();
 
     delete m_frameData;
-    m_frameData = nullptr;
+    for(auto &l_filter : m_jointFilters) delete l_filter;
 }
 
 bool CKinectHandler::Initialize()
@@ -71,12 +71,6 @@ void CKinectHandler::Cleanup()
         m_kinectSensor->NuiShutdown();
         m_kinectSensor->Release();
         m_kinectSensor = nullptr;
-    }
-
-    for(auto &l_filter : m_jointFilters)
-    {
-        delete l_filter;
-        l_filter = nullptr;
     }
 
     m_paused = false;
