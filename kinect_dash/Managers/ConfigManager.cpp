@@ -172,14 +172,14 @@ void ConfigManager::Save()
     delete l_document;
 }
 
-void ConfigManager::ChangeTrackerState(size_t f_index)
+void ConfigManager::ChangeTrackerState(size_t p_index)
 {
-    if(f_index < g_bonesCount) m_trackersStates[f_index] = !m_trackersStates[f_index];
+    if(p_index < g_bonesCount) m_trackersStates[p_index] = !m_trackersStates[p_index];
 }
-bool ConfigManager::GetTrackerState(size_t f_index) const
+bool ConfigManager::GetTrackerState(size_t p_index) const
 {
     bool l_result = false;
-    if(f_index < g_bonesCount) l_result = m_trackersStates[f_index];
+    if(p_index < g_bonesCount) l_result = m_trackersStates[p_index];
     return l_result;
 }
 
@@ -192,27 +192,27 @@ bool ConfigManager::GetTrackingState() const
     return m_trackingState;
 }
 
-void ConfigManager::SetInterpolationType(size_t f_type)
+void ConfigManager::SetInterpolationType(size_t p_type)
 {
-    m_interpolationType = glm::clamp<size_t>(f_type, FrameInterpolation::FI_Linear, FrameInterpolation::FI_Circular);
+    m_interpolationType = glm::clamp<size_t>(p_type, FrameInterpolation::FI_Linear, FrameInterpolation::FI_Circular);
 }
 size_t ConfigManager::GetInterpolationType() const
 {
     return m_interpolationType;
 }
 
-void ConfigManager::SetBasePosition(const glm::vec3 &f_pos)
+void ConfigManager::SetBasePosition(const glm::vec3 &p_pos)
 {
-    std::memcpy(&m_basePosition, &f_pos, sizeof(glm::vec3));
+    std::memcpy(&m_basePosition, &p_pos, sizeof(glm::vec3));
 }
 const glm::vec3& ConfigManager::GetBasePosition() const
 {
     return m_basePosition;
 }
 
-void ConfigManager::SetBaseRotation(const glm::quat &f_rot)
+void ConfigManager::SetBaseRotation(const glm::quat &p_rot)
 {
-    std::memcpy(&m_baseRotation, &f_rot, sizeof(glm::quat));
+    std::memcpy(&m_baseRotation, &p_rot, sizeof(glm::quat));
 }
 const glm::quat& ConfigManager::GetBaseRotation() const
 {

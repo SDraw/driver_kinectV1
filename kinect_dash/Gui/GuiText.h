@@ -9,6 +9,6 @@ class GuiText final : public GuiElement
     // GuiElement
     void Update() override;
 public:
-    explicit GuiText(const std::string &f_name);
+    explicit GuiText(const std::string &p_name);
     ~GuiText();
 };

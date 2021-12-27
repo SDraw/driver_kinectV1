@@ -2,18 +2,18 @@
 #include "Gui/GuiCheckbox.h"
 
 
-GuiCheckbox::GuiCheckbox(const std::string &f_name, bool f_state) : GuiElement(f_name)
+GuiCheckbox::GuiCheckbox(const std::string &p_name, bool p_state) : GuiElement(p_name)
 {
-    m_lastState = f_state;
-    m_currentState = f_state;
+    m_lastState = p_state;
+    m_currentState = p_state;
 }
 GuiCheckbox::~GuiCheckbox()
 {
 }
 
-void GuiCheckbox::SetCheckCallback(const std::function<void(bool)> &f_callback)
+void GuiCheckbox::SetCheckCallback(const std::function<void(bool)> &p_callback)
 {
-    m_checkCallback = f_callback;
+    m_checkCallback = p_callback;
 }
 
 void GuiCheckbox::Update()

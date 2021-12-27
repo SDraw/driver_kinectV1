@@ -93,46 +93,46 @@ bool CEmulatedDevice::IsConnected() const
     return m_connected;
 }
 
-void CEmulatedDevice::SetConnected(bool f_state)
+void CEmulatedDevice::SetConnected(bool p_state)
 {
-    m_connected = f_state;
+    m_connected = p_state;
     m_pose.deviceIsConnected = (m_connected && m_forcedConnected);
 }
 
-void CEmulatedDevice::SetForcedConnected(bool f_state)
+void CEmulatedDevice::SetForcedConnected(bool p_state)
 {
-    m_forcedConnected = f_state;
+    m_forcedConnected = p_state;
     m_pose.deviceIsConnected = (m_connected && m_forcedConnected);
 }
 
-void CEmulatedDevice::SetPosition(float f_x, float f_y, float f_z)
+void CEmulatedDevice::SetPosition(float p_x, float p_y, float p_z)
 {
-    m_pose.vecPosition[0U] = f_x;
-    m_pose.vecPosition[1U] = f_y;
-    m_pose.vecPosition[2U] = f_z;
+    m_pose.vecPosition[0U] = p_x;
+    m_pose.vecPosition[1U] = p_y;
+    m_pose.vecPosition[2U] = p_z;
 }
 
-void CEmulatedDevice::SetRotation(float f_x, float f_y, float f_z, float f_w)
+void CEmulatedDevice::SetRotation(float p_x, float p_y, float p_z, float p_w)
 {
-    m_pose.qRotation.x = f_x;
-    m_pose.qRotation.y = f_y;
-    m_pose.qRotation.z = f_z;
-    m_pose.qRotation.w = f_w;
+    m_pose.qRotation.x = p_x;
+    m_pose.qRotation.y = p_y;
+    m_pose.qRotation.z = p_z;
+    m_pose.qRotation.w = p_w;
 }
 
-void CEmulatedDevice::SetOffsetPosition(float f_x, float f_y, float f_z)
+void CEmulatedDevice::SetOffsetPosition(float p_x, float p_y, float p_z)
 {
-    m_pose.vecWorldFromDriverTranslation[0U] = f_x;
-    m_pose.vecWorldFromDriverTranslation[1U] = f_y;
-    m_pose.vecWorldFromDriverTranslation[2U] = f_z;
+    m_pose.vecWorldFromDriverTranslation[0U] = p_x;
+    m_pose.vecWorldFromDriverTranslation[1U] = p_y;
+    m_pose.vecWorldFromDriverTranslation[2U] = p_z;
 }
 
-void CEmulatedDevice::SetOffsetRotation(float f_x, float f_y, float f_z, float f_w)
+void CEmulatedDevice::SetOffsetRotation(float p_x, float p_y, float p_z, float p_w)
 {
-    m_pose.qWorldFromDriverRotation.x = f_x;
-    m_pose.qWorldFromDriverRotation.y = f_y;
-    m_pose.qWorldFromDriverRotation.z = f_z;
-    m_pose.qWorldFromDriverRotation.w = f_w;
+    m_pose.qWorldFromDriverRotation.x = p_x;
+    m_pose.qWorldFromDriverRotation.y = p_y;
+    m_pose.qWorldFromDriverRotation.z = p_z;
+    m_pose.qWorldFromDriverRotation.w = p_w;
 }
 
 void CEmulatedDevice::SetupProperties()

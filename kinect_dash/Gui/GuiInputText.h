@@ -12,13 +12,13 @@ class GuiInputText final : public GuiElement
     // GuiElement
     void Update() override;
 public:
-    explicit GuiInputText(const std::string &f_name);
+    explicit GuiInputText(const std::string &p_name);
     ~GuiInputText();
 
-    void SetText(const std::string &f_text);
+    void SetText(const std::string &p_text);
     const std::string& GetText() const;
 
-    void SetSidesSwitched(bool f_state);
+    void SetSidesSwitched(bool p_state);
     bool GetSidesSwitched() const;
 };
 

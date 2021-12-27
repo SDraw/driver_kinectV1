@@ -12,8 +12,8 @@ class GuiButton final : public GuiElement
     // GuiElement
     void Update() override;
 public:
-    explicit GuiButton(const std::string &f_name);
+    explicit GuiButton(const std::string &p_name);
     ~GuiButton();
 
-    void SetClickCallback(const std::function<void(bool)> &f_callback);
+    void SetClickCallback(const std::function<void(bool)> &p_callback);
 };

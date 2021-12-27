@@ -12,12 +12,12 @@ class GuiRadioButton final : public GuiElement
     // GuiElement
     void Update() override;
 public:
-    explicit GuiRadioButton(const std::string& f_name);
+    explicit GuiRadioButton(const std::string& p_name);
     ~GuiRadioButton();
 
-    void SetActive(bool f_state);
+    void SetActive(bool p_state);
     bool GetActive() const;
 
-    void SetClickCallback(const std::function<void(void)> &f_callback);
+    void SetClickCallback(const std::function<void(void)> &p_callback);
 };
 

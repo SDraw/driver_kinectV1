@@ -43,12 +43,12 @@ class GuiManager final
     GuiManager(const GuiManager &that) = delete;
     GuiManager& operator=(const GuiManager &that) = delete;
 
-    void OnTrackerToggle(bool f_state, size_t f_index);
-    void OnTrackingToggle(bool f_state);
-    void OnInterpolationChange(size_t f_type);
-    void OnCalibrationStart(bool f_state);
+    void OnTrackerToggle(bool p_state, size_t p_index);
+    void OnTrackingToggle(bool p_state);
+    void OnInterpolationChange(size_t p_type);
+    void OnCalibrationStart(bool p_state);
 protected:
-    explicit GuiManager(Core *f_core);
+    explicit GuiManager(Core *p_core);
     ~GuiManager();
 
 #ifndef DASHBOARD_DESKTOP
@@ -58,6 +58,6 @@ protected:
     void Render(); // SfmlManager call only
 
     // VRManager/SfmlManager only
-    void ReceiveMouseMove(float f_x, float f_y);
-    void ReceiveMouseClick(bool f_left, bool f_press);
+    void ReceiveMouseMove(float p_x, float p_y);
+    void ReceiveMouseClick(bool p_left, bool p_press);
 };

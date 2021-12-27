@@ -3,9 +3,9 @@
 #include "Gui/GuiElement.h"
 
 
-GuiElement::GuiElement(const std::string &f_name)
+GuiElement::GuiElement(const std::string &p_name)
 {
-    m_name.assign(f_name);
+    m_name.assign(p_name);
     m_position = sf::Vector2f(0.f,0.f);
     m_imguiPosition = ImVec2(0.f, 0.f);
     m_size = sf::Vector2f(0.f,0.f);
@@ -21,34 +21,34 @@ GuiElement::~GuiElement()
 {
 }
 
-bool GuiElement::Add(GuiElement *f_child)
+bool GuiElement::Add(GuiElement *p_child)
 {
-    if(f_child->m_parent == nullptr)
+    if(p_child->m_parent == nullptr)
     {
-        m_children.push_back(f_child);
-        f_child->m_parent = this;
+        m_children.push_back(p_child);
+        p_child->m_parent = this;
     }
 
-    return (f_child->m_parent == this);
+    return (p_child->m_parent == this);
 }
 
-void GuiElement::Remove(GuiElement *f_child)
+void GuiElement::Remove(GuiElement *p_child)
 {
-    if(f_child->m_parent == this)
+    if(p_child->m_parent == this)
     {
-        f_child->m_parent = nullptr;
-        m_children.erase(std::remove(m_children.begin(), m_children.end(), f_child), m_children.end());
+        p_child->m_parent = nullptr;
+        m_children.erase(std::remove(m_children.begin(), m_children.end(), p_child), m_children.end());
     }
 }
 
-bool GuiElement::HasChild(const GuiElement *f_child)
+bool GuiElement::HasChild(const GuiElement *p_child)
 {
-    return (std::find(m_children.begin(), m_children.end(), f_child) != m_children.end());
+    return (std::find(m_children.begin(), m_children.end(), p_child) != m_children.end());
 }
 
-void GuiElement::SetPosition(const sf::Vector2f &f_pos)
+void GuiElement::SetPosition(const sf::Vector2f &p_pos)
 {
-    m_position = f_pos;
+    m_position = p_pos;
     m_imguiPosition.x = m_position.x;
     m_imguiPosition.y = m_position.y;
 }
@@ -57,9 +57,9 @@ const sf::Vector2f& GuiElement::GetPosition() const
     return m_position;
 }
 
-void GuiElement::SetSize(const sf::Vector2f &f_size)
+void GuiElement::SetSize(const sf::Vector2f &p_size)
 {
-    m_size = f_size;
+    m_size = p_size;
     m_imguiSize.x = m_size.x;
     m_imguiSize.y = m_size.y;
 }
@@ -68,9 +68,9 @@ const sf::Vector2f& GuiElement::GetSize() const
     return m_size;
 }
 
-void GuiElement::SetColor(const sf::Color &f_col)
+void GuiElement::SetColor(const sf::Color &p_col)
 {
-    m_color = f_col;
+    m_color = p_col;
     m_imguiColor.x = static_cast<float>(m_color.r) / 255.f;
     m_imguiColor.y = static_cast<float>(m_color.g) / 255.f;
     m_imguiColor.z = static_cast<float>(m_color.b) / 255.f;
@@ -81,9 +81,9 @@ const sf::Color& GuiElement::GetColor() const
     return m_color;
 }
 
-void GuiElement::SetOnSameLine(bool f_state)
+void GuiElement::SetOnSameLine(bool p_state)
 {
-    m_sameLine = f_state;
+    m_sameLine = p_state;
 }
 bool GuiElement::GetOnSameLine() const
 {

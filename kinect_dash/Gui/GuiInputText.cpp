@@ -2,7 +2,7 @@
 
 #include "Gui/GuiInputText.h"
 
-GuiInputText::GuiInputText(const std::string &f_name) : GuiElement(f_name)
+GuiInputText::GuiInputText(const std::string &p_name) : GuiElement(p_name)
 {
     m_sidesSwitched = false;
 }
@@ -10,18 +10,18 @@ GuiInputText::~GuiInputText()
 {
 }
 
-void GuiInputText::SetText(const std::string &f_text)
+void GuiInputText::SetText(const std::string &p_text)
 {
-    m_text.assign(f_text);
+    m_text.assign(p_text);
 }
 const std::string& GuiInputText::GetText() const
 {
     return m_text;
 }
 
-void GuiInputText::SetSidesSwitched(bool f_state)
+void GuiInputText::SetSidesSwitched(bool p_state)
 {
-    m_sidesSwitched = f_state;
+    m_sidesSwitched = p_state;
 }
 bool GuiInputText::GetSidesSwitched() const
 {

@@ -13,9 +13,9 @@ class GuiCheckbox final : public GuiElement
     // GuiElement
     void Update() override;
 public:
-    explicit GuiCheckbox(const std::string &f_name, bool f_state = false);
+    explicit GuiCheckbox(const std::string &p_name, bool p_state = false);
     ~GuiCheckbox();
 
-    void SetCheckCallback(const std::function<void(bool)> &f_callback);
+    void SetCheckCallback(const std::function<void(bool)> &p_callback);
 };
 

@@ -22,7 +22,7 @@ public:
     sf::RenderWindow* GetWindow() const;
 #endif
 protected:
-    explicit SfmlManager(Core *f_core);
+    explicit SfmlManager(Core *p_core);
     ~SfmlManager();
 
     bool DoPulse();

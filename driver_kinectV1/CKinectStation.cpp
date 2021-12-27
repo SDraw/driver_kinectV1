@@ -3,9 +3,9 @@
 #include "CKinectStation.h"
 #include "CServerDriver.h"
 
-CKinectStation::CKinectStation(CServerDriver *f_server)
+CKinectStation::CKinectStation(CServerDriver *p_server)
 {
-    m_serverDriver = f_server;
+    m_serverDriver = p_server;
     m_serial.assign("KS-10");
 }
 

@@ -32,17 +32,17 @@ class CalibrationHelper final
     CalibrationHelper(const CalibrationHelper &that) = delete;
     CalibrationHelper& operator=(const CalibrationHelper &that) = delete;
 protected:
-    explicit CalibrationHelper(VRManager *f_vrManager);
+    explicit CalibrationHelper(VRManager *p_vrManager);
     ~CalibrationHelper();
 
     void StartCalibration();
     void StopCalibration();
     bool IsCalibrationActive() const;
 
-    void RecieveControllerAxis(bool f_left, const glm::vec2 &f_axis);
-    void RecieveControllerTrigger(bool f_left, bool f_state);
-    void ReciveControllerGrip(bool f_left, bool f_state);
-    void RecieveControllerDisconnect(bool f_left);
+    void RecieveControllerAxis(bool p_left, const glm::vec2 &p_axis);
+    void RecieveControllerTrigger(bool p_left, bool p_state);
+    void ReciveControllerGrip(bool p_left, bool p_state);
+    void RecieveControllerDisconnect(bool p_left);
 
     void DoPulse();
 };

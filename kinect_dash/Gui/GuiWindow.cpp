@@ -2,7 +2,7 @@
 
 #include "Gui/GuiWindow.h"
 
-GuiWindow::GuiWindow(const std::string &f_title) : GuiElement(f_title)
+GuiWindow::GuiWindow(const std::string &p_title) : GuiElement(p_title)
 {
 }
 GuiWindow::~GuiWindow()

@@ -2,7 +2,7 @@
 #include "Gui/GuiText.h"
 
 
-GuiText::GuiText(const std::string &f_name) : GuiElement(f_name)
+GuiText::GuiText(const std::string &p_name) : GuiElement(p_name)
 {
 }
 GuiText::~GuiText()

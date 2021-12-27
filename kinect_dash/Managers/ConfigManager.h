@@ -25,19 +25,19 @@ public:
         FI_Circular
     };
 
-    void ChangeTrackerState(size_t f_index);
-    bool GetTrackerState(size_t f_index) const;
+    void ChangeTrackerState(size_t p_index);
+    bool GetTrackerState(size_t p_index) const;
 
     void ChangeTrackingState();
     bool GetTrackingState() const;
 
-    void SetInterpolationType(size_t f_type);
+    void SetInterpolationType(size_t p_type);
     size_t GetInterpolationType() const;
 
-    void SetBasePosition(const glm::vec3 &f_pos);
+    void SetBasePosition(const glm::vec3 &p_pos);
     const glm::vec3& GetBasePosition() const;
 
-    void SetBaseRotation(const glm::quat &f_rot);
+    void SetBaseRotation(const glm::quat &p_rot);
     const glm::quat& GetBaseRotation() const;
 protected:
     ConfigManager();

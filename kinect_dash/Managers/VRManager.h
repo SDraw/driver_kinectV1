@@ -38,18 +38,18 @@ public:
     bool IsOverlayVisible() const;
 #endif
 
-    void SendTrackerToggle(size_t f_index);
+    void SendTrackerToggle(size_t p_index);
     void SendTrackingToggle();
-    void SendInterpolationChange(size_t f_type);
-    void SendCalibration(const glm::vec3 &f_pos, const glm::quat &f_rot);
+    void SendInterpolationChange(size_t p_type);
+    void SendCalibration(const glm::vec3 &p_pos, const glm::quat &p_rot);
 
     void LaunchCalibration();
 protected:
-    explicit VRManager(Core *f_core);
+    explicit VRManager(Core *p_core);
     ~VRManager();
 
 #ifndef DASHBOARD_DESKTOP
-    void SetOverlayTexture(unsigned int f_name);
+    void SetOverlayTexture(unsigned int p_name);
 #endif
 
     bool DoPulse();

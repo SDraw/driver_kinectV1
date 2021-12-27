@@ -6,9 +6,9 @@
 
 SFML_DEFINE_DISCRETE_GPU_PREFERENCE;
 
-SfmlManager::SfmlManager(Core *f_core)
+SfmlManager::SfmlManager(Core *p_core)
 {
-    m_core = f_core;
+    m_core = p_core;
 
     // AMD sucks at OpenGL implementation
     const sf::ContextSettings l_contextSettings(16U, 8U, 0U, 2U, 1U, sf::ContextSettings::Default, false);

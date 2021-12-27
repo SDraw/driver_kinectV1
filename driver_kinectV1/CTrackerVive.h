@@ -11,6 +11,6 @@ class CTrackerVive final : public CEmulatedDevice
 
     void SetupProperties() override;
 public:
-    explicit CTrackerVive(size_t f_index);
+    explicit CTrackerVive(size_t p_index);
     ~CTrackerVive();
 };

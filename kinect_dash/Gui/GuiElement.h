@@ -7,21 +7,21 @@ class GuiElement
 
     bool m_sameLine;
 public:
-    bool Add(GuiElement *f_child);
-    void Remove(GuiElement *f_child);
-    bool HasChild(const GuiElement *f_child);
+    bool Add(GuiElement *p_child);
+    void Remove(GuiElement *p_child);
+    bool HasChild(const GuiElement *p_child);
 
-    void SetPosition(const sf::Vector2f &f_pos);
+    void SetPosition(const sf::Vector2f &p_pos);
     const sf::Vector2f& GetPosition() const;
 
-    void SetSize(const sf::Vector2f &f_size);
+    void SetSize(const sf::Vector2f &p_size);
     const sf::Vector2f& GetSize() const;
 
     // Not all elements are affected by color
-    void SetColor(const sf::Color &f_col);
+    void SetColor(const sf::Color &p_col);
     const sf::Color& GetColor() const;
 
-    void SetOnSameLine(bool f_state);
+    void SetOnSameLine(bool p_state);
     bool GetOnSameLine() const;
 protected:
     std::string m_name;
@@ -35,7 +35,7 @@ protected:
     std::vector<GuiElement*> m_children;
     GuiElement *m_parent;
 
-    explicit GuiElement(const std::string &f_name);
+    explicit GuiElement(const std::string &p_name);
     ~GuiElement();
 
     virtual void Update();

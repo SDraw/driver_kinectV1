@@ -7,9 +7,9 @@
 
 const char *g_notificationText = "Base calibration\nLeft controller: Rotate L/R/U/D\tRight controller: Move L/R, U/D and (hold trigger) F/B\tGrip: reset rotation/position";
 
-VRManager::VRManager(Core *f_core)
+VRManager::VRManager(Core *p_core)
 {
-    m_core = f_core;
+    m_core = p_core;
 
     vr::EVRInitError l_initError;
     m_vrSystem = vr::VR_Init(&l_initError, vr::VRApplication_Overlay);
@@ -205,18 +205,18 @@ bool VRManager::IsOverlayVisible() const
     return l_result;
 }
 
-void VRManager::SetOverlayTexture(unsigned int f_name)
+void VRManager::SetOverlayTexture(unsigned int p_name)
 {
-    if(m_dashboardOverlay != vr::k_ulOverlayHandleInvalid) m_dashboardTexture.handle = reinterpret_cast<void*>(static_cast<uintptr_t>(f_name));;
+    if(m_dashboardOverlay != vr::k_ulOverlayHandleInvalid) m_dashboardTexture.handle = reinterpret_cast<void*>(static_cast<uintptr_t>(p_name));;
 }
 #endif
 
-void VRManager::SendTrackerToggle(size_t f_index)
+void VRManager::SendTrackerToggle(size_t p_index)
 {
     if(m_kinectDevice != vr::k_unTrackedDeviceIndexInvalid)
     {
         std::string l_message("tracker_toggle ");
-        l_message.append(std::to_string(f_index));
+        l_message.append(std::to_string(p_index));
         char l_response[32U] = { 0 };
         vr::VRDebug()->DriverDebugRequest(m_kinectDevice, l_message.c_str(), l_response, 32U);
     }
@@ -231,30 +231,30 @@ void VRManager::SendTrackingToggle()
     }
 }
 
-void VRManager::SendInterpolationChange(size_t f_type)
+void VRManager::SendInterpolationChange(size_t p_type)
 {
     if(m_kinectDevice != vr::k_unTrackedDeviceIndexInvalid)
     {
         std::string l_message("interpolation ");
-        l_message.append(std::to_string(f_type));
+        l_message.append(std::to_string(p_type));
         char l_response[32U] = { 0 };
         vr::VRDebug()->DriverDebugRequest(m_kinectDevice, l_message.c_str(), l_response, 32U);
     }
 }
 
-void VRManager::SendCalibration(const glm::vec3 &f_pos, const glm::quat &f_rot)
+void VRManager::SendCalibration(const glm::vec3 &p_pos, const glm::quat &p_rot)
 {
     if(m_kinectDevice != vr::k_unTrackedDeviceIndexInvalid)
     {
         std::string l_message("calibration ");
         for(int i = 0; i < 3; i++)
         {
-            l_message.append(std::to_string(f_pos[i]));
+            l_message.append(std::to_string(p_pos[i]));
             l_message.push_back(' ');
         }
         for(int i = 0; i < 4; i++)
         {
-            l_message.append(std::to_string(f_rot[i]));
+            l_message.append(std::to_string(p_rot[i]));
             if(i < 3) l_message.push_back(' ');
         }
 

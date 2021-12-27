@@ -9,6 +9,6 @@ class GuiWindow final : public GuiElement
     // GuiElement
     void Update() override;
 public:
-    explicit GuiWindow(const std::string &f_title);
+    explicit GuiWindow(const std::string &p_title);
     ~GuiWindow();
 };

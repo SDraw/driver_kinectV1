@@ -11,10 +11,10 @@ class GuiLabel final : public GuiElement
     // GuiElement
     void Update() override;
 public:
-    explicit GuiLabel(const std::string &f_caption);
+    explicit GuiLabel(const std::string &p_caption);
     ~GuiLabel();
 
-    void SetText(const std::string &f_text);
+    void SetText(const std::string &p_text);
     const std::string& GetText() const;
 };
 

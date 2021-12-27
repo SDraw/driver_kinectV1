@@ -15,6 +15,6 @@ class CKinectStation final : public CEmulatedDevice
     // vr::ITrackedDeviceServerDriver
     void DebugRequest(const char* pchRequest, char* pchResponseBuffer, uint32_t unResponseBufferSize) override;
 public:
-    explicit CKinectStation(CServerDriver *f_server);
+    explicit CKinectStation(CServerDriver *p_server);
     ~CKinectStation();
 };

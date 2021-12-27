@@ -2,16 +2,16 @@
 
 #include "Gui/GuiLabel.h"
 
-GuiLabel::GuiLabel(const std::string &f_caption) : GuiElement(f_caption)
+GuiLabel::GuiLabel(const std::string &p_caption) : GuiElement(p_caption)
 {
 }
 GuiLabel::~GuiLabel()
 {
 }
 
-void GuiLabel::SetText(const std::string &f_text)
+void GuiLabel::SetText(const std::string &p_text)
 {
-    m_text.assign(f_text);
+    m_text.assign(p_text);
 }
 const std::string& GuiLabel::GetText() const
 {

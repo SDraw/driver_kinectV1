@@ -50,9 +50,9 @@ const sf::Color g_untoggledColor(32, 32, 32, 255);
 const sf::Color g_activeColor(0, 127, 0, 255);
 const sf::Color g_inactiveColor(127, 0, 0, 255);
 
-GuiManager::GuiManager(Core *f_core)
+GuiManager::GuiManager(Core *p_core)
 {
-    m_core = f_core;
+    m_core = p_core;
 
 #ifndef DASHBOARD_DESKTOP
     m_renderTexture = new sf::RenderTexture();
@@ -244,29 +244,29 @@ unsigned int GuiManager::GetRenderTargetTextureName() const
 }
 #endif
 
-void GuiManager::ReceiveMouseMove(float f_x, float f_y)
+void GuiManager::ReceiveMouseMove(float p_x, float p_y)
 {
-    if(m_screen) m_screen->InjectMouseMove(sf::Vector2f(f_x, f_y));
+    if(m_screen) m_screen->InjectMouseMove(sf::Vector2f(p_x, p_y));
 }
-void GuiManager::ReceiveMouseClick(bool f_left, bool f_press)
+void GuiManager::ReceiveMouseClick(bool p_left, bool p_press)
 {
-    if(m_screen) m_screen->InjectMouseClick(f_left ? sf::Mouse::Button::Left : sf::Mouse::Button::Right, f_press);
+    if(m_screen) m_screen->InjectMouseClick(p_left ? sf::Mouse::Button::Left : sf::Mouse::Button::Right, p_press);
 }
 
-void GuiManager::OnTrackerToggle(bool f_state, size_t f_index)
+void GuiManager::OnTrackerToggle(bool p_state, size_t p_index)
 {
-    if(f_state)
+    if(p_state)
     {
-        bool l_newTrackerState = !m_core->GetConfigManager()->GetTrackerState(f_index);
-        m_trackersButtons[f_index]->SetColor(l_newTrackerState ? g_activeColor : g_untoggledColor);
-        m_core->GetVRManager()->SendTrackerToggle(f_index);
-        m_core->GetConfigManager()->ChangeTrackerState(f_index);
+        bool l_newTrackerState = !m_core->GetConfigManager()->GetTrackerState(p_index);
+        m_trackersButtons[p_index]->SetColor(l_newTrackerState ? g_activeColor : g_untoggledColor);
+        m_core->GetVRManager()->SendTrackerToggle(p_index);
+        m_core->GetConfigManager()->ChangeTrackerState(p_index);
     }
 }
 
-void GuiManager::OnTrackingToggle(bool f_state)
+void GuiManager::OnTrackingToggle(bool p_state)
 {
-    if(f_state)
+    if(p_state)
     {
         bool l_newTrackingState = !m_core->GetConfigManager()->GetTrackingState();
         m_settingsButtons[SettingsButton::SB_ToggleTracking]->SetColor(l_newTrackingState ? g_activeColor : g_inactiveColor);
@@ -275,18 +275,18 @@ void GuiManager::OnTrackingToggle(bool f_state)
     }
 }
 
-void GuiManager::OnInterpolationChange(size_t f_type)
+void GuiManager::OnInterpolationChange(size_t p_type)
 {
     for(size_t i = 0U; i < 8U; i++)
     {
-        if(i != f_type) m_interpolationButtons[i]->SetActive(false);
+        if(i != p_type) m_interpolationButtons[i]->SetActive(false);
     }
 
-    m_core->GetVRManager()->SendInterpolationChange(f_type);
-    m_core->GetConfigManager()->SetInterpolationType(f_type);
+    m_core->GetVRManager()->SendInterpolationChange(p_type);
+    m_core->GetConfigManager()->SetInterpolationType(p_type);
 }
 
-void GuiManager::OnCalibrationStart(bool f_state)
+void GuiManager::OnCalibrationStart(bool p_state)
 {
-    if(f_state) m_core->GetVRManager()->LaunchCalibration();
+    if(p_state) m_core->GetVRManager()->LaunchCalibration();
 }

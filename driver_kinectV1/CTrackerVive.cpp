@@ -2,11 +2,11 @@
 
 #include "CTrackerVive.h"
 
-CTrackerVive::CTrackerVive(size_t f_index)
+CTrackerVive::CTrackerVive(size_t p_index)
 {
     m_serial.assign("LHR-CB0CD00");
-    m_serial.append(std::to_string(f_index));
-    m_index = f_index;
+    m_serial.append(std::to_string(p_index));
+    m_index = p_index;
 }
 
 CTrackerVive::~CTrackerVive()

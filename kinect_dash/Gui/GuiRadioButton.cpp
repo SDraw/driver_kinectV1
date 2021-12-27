@@ -3,7 +3,7 @@
 #include "Gui/GuiRadioButton.h"
 
 
-GuiRadioButton::GuiRadioButton(const std::string& f_name) : GuiElement(f_name)
+GuiRadioButton::GuiRadioButton(const std::string& p_name) : GuiElement(p_name)
 {
     m_active = false;
 }
@@ -11,18 +11,18 @@ GuiRadioButton::~GuiRadioButton()
 {
 }
 
-void GuiRadioButton::SetActive(bool f_state)
+void GuiRadioButton::SetActive(bool p_state)
 {
-    m_active = f_state;
+    m_active = p_state;
 }
 bool GuiRadioButton::GetActive() const
 {
     return m_active;
 }
 
-void GuiRadioButton::SetClickCallback(const std::function<void(void)> &f_callback)
+void GuiRadioButton::SetClickCallback(const std::function<void(void)> &p_callback)
 {
-    m_clickCallback = f_callback;
+    m_clickCallback = p_callback;
 }
 
 void GuiRadioButton::Update()

@@ -17,9 +17,9 @@ const glm::vec3 g_axisYN(0.f, -1.f, 0.f);
 const glm::vec3 g_axisZ(0.f, 0.f, 1.f);
 const glm::vec3 g_axisZN(0.f, 0.f, -1.f);
 
-CalibrationHelper::CalibrationHelper(VRManager *f_vrManager)
+CalibrationHelper::CalibrationHelper(VRManager *p_vrManager)
 {
-    m_vrManager = f_vrManager;
+    m_vrManager = p_vrManager;
     m_active = false;
 
     m_inputInfoLeft.m_quadrant = CQ_None;
@@ -65,15 +65,15 @@ bool CalibrationHelper::IsCalibrationActive() const
     return m_active;
 }
 
-void CalibrationHelper::RecieveControllerAxis(bool f_left, const glm::vec2 &f_axis)
+void CalibrationHelper::RecieveControllerAxis(bool p_left, const glm::vec2 &p_axis)
 {
     if(m_active)
     {
-        InputInfo &l_inputInfo = (f_left ? m_inputInfoLeft : m_inputInfoRight);
+        InputInfo &l_inputInfo = (p_left ? m_inputInfoLeft : m_inputInfoRight);
 
-        if(glm::length(f_axis) >= 0.5f)
+        if(glm::length(p_axis) >= 0.5f)
         {
-            float l_theta = std::atan2f(f_axis.y, f_axis.x);
+            float l_theta = std::atan2f(p_axis.y, p_axis.x);
             if(l_theta < 0.f) l_theta = g_pi2 + l_theta;
             l_theta += g_piQuarter;
             l_theta = std::fmod(l_theta, g_pi2);
@@ -82,21 +82,21 @@ void CalibrationHelper::RecieveControllerAxis(bool f_left, const glm::vec2 &f_ax
         else l_inputInfo.m_quadrant = CQ_None;
     }
 }
-void CalibrationHelper::RecieveControllerTrigger(bool f_left, bool f_state)
+void CalibrationHelper::RecieveControllerTrigger(bool p_left, bool p_state)
 {
     if(m_active)
     {
-        InputInfo &l_inputInfo = (f_left ? m_inputInfoLeft : m_inputInfoRight);
-        l_inputInfo.m_trigger = f_state;
+        InputInfo &l_inputInfo = (p_left ? m_inputInfoLeft : m_inputInfoRight);
+        l_inputInfo.m_trigger = p_state;
     }
 }
-void CalibrationHelper::ReciveControllerGrip(bool f_left, bool f_state)
+void CalibrationHelper::ReciveControllerGrip(bool p_left, bool p_state)
 {
     if(m_active)
     {
-        if(f_state)
+        if(p_state)
         {
-            if(f_left) m_baseRotation = glm::quat(1.f,0.f,0.f,0.f);
+            if(p_left) m_baseRotation = glm::quat(1.f,0.f,0.f,0.f);
             else m_basePosition = glm::vec3(0.f);
 
             m_vrManager->SendCalibration(m_basePosition, m_baseRotation);
@@ -105,11 +105,11 @@ void CalibrationHelper::ReciveControllerGrip(bool f_left, bool f_state)
         }
     }
 }
-void CalibrationHelper::RecieveControllerDisconnect(bool f_left)
+void CalibrationHelper::RecieveControllerDisconnect(bool p_left)
 {
     if(m_active)
     {
-        InputInfo &l_inputInfo = (f_left ? m_inputInfoLeft : m_inputInfoRight);
+        InputInfo &l_inputInfo = (p_left ? m_inputInfoLeft : m_inputInfoRight);
         l_inputInfo.m_quadrant = CQ_None;
         l_inputInfo.m_trigger = false;
     }

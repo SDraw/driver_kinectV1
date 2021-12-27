@@ -43,5 +43,5 @@ public:
     CServerDriver();
     ~CServerDriver();
 
-    void ProcessExternalMessage(const char *f_message);
+    void ProcessExternalMessage(const char *p_message);
 };

@@ -267,9 +267,9 @@ void CServerDriver::KinectProcess()
     if(l_initialized) m_kinectHandler->Terminate();
 }
 
-void CServerDriver::ProcessExternalMessage(const char *f_message)
+void CServerDriver::ProcessExternalMessage(const char *p_message)
 {
-    std::stringstream l_stream(f_message);
+    std::stringstream l_stream(p_message);
     std::string l_message;
     l_stream >> l_message;
     if(!l_message.empty() && !l_stream.fail())

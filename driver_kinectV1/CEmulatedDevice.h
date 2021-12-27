@@ -24,14 +24,14 @@ public:
     const size_t GetIndex() const;
 
     bool IsConnected() const;
-    void SetConnected(bool f_state);
-    void SetForcedConnected(bool f_state);
+    void SetConnected(bool p_state);
+    void SetForcedConnected(bool p_state);
 
-    void SetPosition(float f_x, float f_y, float f_z);
-    void SetRotation(float f_x, float f_y, float f_z, float f_w);
+    void SetPosition(float p_x, float p_y, float p_z);
+    void SetRotation(float p_x, float p_y, float p_z, float p_w);
 
-    void SetOffsetPosition(float f_x, float f_y, float f_z);
-    void SetOffsetRotation(float f_x, float f_y, float f_z, float f_w);
+    void SetOffsetPosition(float p_x, float p_y, float p_z);
+    void SetOffsetRotation(float p_x, float p_y, float p_z, float p_w);
 
     void RunFrame();
 protected:
