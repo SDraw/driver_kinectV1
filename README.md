@@ -33,9 +33,8 @@ Open `KinectV1 Dashboard` from SteamVR dashboard to gain access to available set
   * **Interpolation type:** Sets specific interpolation between Kinect frames. More info is available at [Wikipedia's article](https://en.wikipedia.org/wiki/Interpolation).
   * **Kinect relay device state:** Shows if specific virtual base station is present.
   
-## Usage with desktop version of dashboard
-If you're owner of AMD GPU with latest drivers, you're in luck. Latest drivers breaks functionality of OpenGL.  
-If `KinectV1 Dashboard` overlay is empty, you have to use desktop version of dashboard included in release.  
+## AMD GPUs issue
+If you're owner of AMD GPU you won't be able to see `KinectV1 Dashboard` in SteamVR dashboard due to [SteamVR internal bug](https://github.com/ValveSoftware/openvr/issues/1246). Because of that you have to use desktop version of dashboard included in release.  
 Before you launch `kinect_dash_desktop` from `SteamVR/drivers/kinectV1/bin/win##`, you have to kill `kinect_dash` process from task manager/CMD/PowerShell console.  
 Alternative, you can swap names of `kinect_dash` and `kinect_dash_desktop`.
 
