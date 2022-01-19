@@ -14,11 +14,9 @@ class VRManager final
     vr::VROverlayHandle_t m_notificationOverlay;
     vr::VRNotificationId m_notification;
 
-#ifndef DASHBOARD_DESKTOP
     vr::VROverlayHandle_t m_dashboardOverlay;
     vr::VROverlayHandle_t m_dashboardOverlayThumbnail;
     vr::Texture_t m_dashboardTexture;
-#endif
 
     vr::TrackedDeviceIndex_t m_kinectDevice;
     vr::TrackedDeviceIndex_t m_leftHand;
@@ -34,9 +32,7 @@ public:
     Core* GetCore() const;
 
     bool IsKinectDevicePresent() const;
-#ifndef DASHBOARD_DESKTOP
     bool IsOverlayVisible() const;
-#endif
 
     void SendTrackerToggle(size_t p_index);
     void SendTrackingToggle();
@@ -48,9 +44,7 @@ protected:
     explicit VRManager(Core *p_core);
     ~VRManager();
 
-#ifndef DASHBOARD_DESKTOP
     void SetOverlayTexture(unsigned int p_name);
-#endif
 
     bool DoPulse();
 };

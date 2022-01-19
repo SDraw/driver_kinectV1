@@ -35,9 +35,7 @@ bool Core::Intitialize()
             m_sfmlManager = new SfmlManager(this);
             m_guiManager = new GuiManager(this);
 
-#ifndef DASHBOARD_DESKTOP
             m_vrManager->SetOverlayTexture(m_guiManager->GetRenderTargetTextureName());
-#endif
 
             m_valid = true;
             m_active = true;
@@ -77,9 +75,7 @@ bool Core::DoPulse()
         m_active = (m_active && m_vrManager->DoPulse());
         m_active = (m_active && m_sfmlManager->DoPulse());
 
-#ifndef DASHBOARD_DESKTOP
         std::this_thread::sleep_for(g_threadSleep);
-#endif
     }
     return m_active;
 }

@@ -54,15 +54,11 @@ GuiManager::GuiManager(Core *p_core)
 {
     m_core = p_core;
 
-#ifndef DASHBOARD_DESKTOP
     m_renderTexture = new sf::RenderTexture();
     if(!m_renderTexture->create(1024, 512)) throw std::runtime_error("Unable to create render target for GUI overlay");
 
     sf::Window l_dummyWindow; // imgui-sfml checks only window focus
     ImGui::SFML::Init(l_dummyWindow, *m_renderTexture, false);
-#else
-    ImGui::SFML::Init(*m_core->GetSfmlManager()->GetWindow(), sf::Vector2f(1024.f, 512.f), false);
-#endif
 
     sf::Event l_event;
     l_event.type = sf::Event::EventType::GainedFocus;
@@ -205,17 +201,13 @@ GuiManager::~GuiManager()
     delete m_screen;
     ImGui::SFML::Shutdown();
 
-#ifndef DASHBOARD_DESKTOP
     delete m_renderTexture;
-#endif
 }
 
 void GuiManager::Render()
 {
-#ifndef DASHBOARD_DESKTOP
     if(m_core->GetVRManager()->IsOverlayVisible())
     {
-#endif
         // Update calibration info
         for(size_t i = 0U; i < 4; i++) m_calibrationFields[i * 2]->SetText(std::to_string(m_core->GetConfigManager()->GetBaseRotation()[i]));
         for(size_t i = 0U; i < 3; i++) m_calibrationFields[i * 2 + 1]->SetText(std::to_string(m_core->GetConfigManager()->GetBasePosition()[i]));
@@ -223,26 +215,22 @@ void GuiManager::Render()
         // Update gui elements
         m_screen->Update();
 
-#ifndef DASHBOARD_DESKTOP
         m_renderTexture->setActive(true);
         m_renderTexture->clear();
-#endif
+
         m_screen->Render();
-#ifndef DASHBOARD_DESKTOP
+
         m_renderTexture->display();
         m_renderTexture->setActive(false);
     }
-#endif
 }
 
-#ifndef DASHBOARD_DESKTOP
 unsigned int GuiManager::GetRenderTargetTextureName() const
 {
     unsigned int l_result = 0U;
     if(m_renderTexture) l_result = m_renderTexture->getTexture().getNativeHandle();
     return l_result;
 }
-#endif
 
 void GuiManager::ReceiveMouseMove(float p_x, float p_y)
 {

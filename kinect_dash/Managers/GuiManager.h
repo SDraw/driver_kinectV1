@@ -14,11 +14,10 @@ class GuiManager final
     friend Core;
     friend class SfmlManager;
     friend class VRManager;
+
     Core *m_core;
 
-#ifndef DASHBOARD_DESKTOP
     sf::RenderTexture *m_renderTexture;
-#endif
 
     // Render target is needed
     GuiScreen *m_screen;
@@ -51,9 +50,7 @@ protected:
     explicit GuiManager(Core *p_core);
     ~GuiManager();
 
-#ifndef DASHBOARD_DESKTOP
     unsigned int GetRenderTargetTextureName() const;
-#endif
 
     void Render(); // SfmlManager call only
 

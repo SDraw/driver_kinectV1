@@ -1,0 +1,1 @@
+This is build fork from (https://github.com/SDraw/SFML/tree/2.5.x) to address SteamVR OpenGL textures problems on AMD GPUs (https://github.com/ValveSoftware/openvr/issues/1246).
