@@ -18,7 +18,7 @@ SteamVR driver for Kinect for XBox 360.
   "activateMultipleDrivers": true,
   ```
 
-## Usage with dashboard
+## Dashboard
 ![](./.github/img_01.png)
 Open `KinectV1 Dashboard` from SteamVR dashboard to gain access to available settings for users:
 * **Trackers toggle:** Allows you to toggle trackers for specific bones.
